@@ -75,7 +75,7 @@ export function OriginSelect({
 				</button>
 
 				{isOpen && (
-					<div className="absolute z-50 w-full mt-2 bg-coffee-dark border border-coffee-medium rounded-lg shadow-lg max-h-96 overflow-hidden">
+					<div className="absolute z-50 w-full mt-2 bg-coffee-dark border border-coffee-medium rounded-lg shadow-lg max-h-[50vh] overflow-hidden">
 						{/* Search */}
 						<div className="p-2 border-b border-coffee-medium">
 							<input
@@ -92,13 +92,13 @@ export function OriginSelect({
 						<button
 							type="button"
 							onClick={() => handleSelect(null)}
-							className="w-full px-4 py-2 text-left text-cream-dark hover:bg-coffee-medium transition-colors border-b border-coffee-medium text-sm italic"
+							className="w-full px-4 py-3 text-left text-cream-dark hover:bg-coffee-medium transition-colors border-b border-coffee-medium text-sm italic"
 						>
 							None / Unknown
 						</button>
 
 						{/* Grouped origins by region */}
-						<div className="overflow-y-auto max-h-80">
+						<div className="overflow-y-auto max-h-[40vh]">
 							{Object.entries(groupedOrigins).map(([region, regionOrigins]) => (
 								<div key={region}>
 									<div className="px-4 py-2 bg-espresso text-amber text-xs font-bold sticky top-0">
@@ -160,11 +160,11 @@ export function OriginSelect({
 
 					<div className="text-cream-dark">
 						<div className="opacity-75 mb-1">Characteristics:</div>
-						<div className="grid grid-cols-2 gap-1">
-							<div>📍 {selectedOrigin.characteristics.altitudeRange}</div>
-							<div>🌋 {selectedOrigin.characteristics.soilType}</div>
-							<div>☀️ {selectedOrigin.characteristics.climateType}</div>
-							<div>🔄 {selectedOrigin.characteristics.processingTradition}</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+							<div className="truncate">📍 {selectedOrigin.characteristics.altitudeRange}</div>
+							<div className="truncate">🌋 {selectedOrigin.characteristics.soilType}</div>
+							<div className="truncate">☀️ {selectedOrigin.characteristics.climateType}</div>
+							<div className="truncate">🔄 {selectedOrigin.characteristics.processingTradition}</div>
 						</div>
 					</div>
 

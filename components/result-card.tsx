@@ -82,38 +82,38 @@ ${result.tips.map((tip, i) => `${i + 1}. ${tip}`).join("\n")}
 			</div>
 
 			{/* Hero Numbers */}
-			<div className="grid grid-cols-2 gap-4">
-				<div className="bg-espresso rounded-lg p-6 border border-coffee-medium">
-					<div className="text-cream-dark text-sm mb-1">Dose</div>
-					<div className="text-5xl font-bold text-amber">
+			<div className="grid grid-cols-2 gap-3 md:gap-4">
+				<div className="bg-espresso rounded-lg p-4 md:p-6 border border-coffee-medium">
+					<div className="text-cream-dark text-xs sm:text-sm mb-1">Dose</div>
+					<div className="text-4xl md:text-5xl font-bold text-amber">
 						{result.recommendedDoseG}
 					</div>
-					<div className="text-cream text-sm mt-1">grams</div>
+					<div className="text-cream text-xs sm:text-sm mt-1">grams</div>
 				</div>
 
-				<div className="bg-espresso rounded-lg p-6 border border-coffee-medium">
-					<div className="text-cream-dark text-sm mb-1">Grind Setting</div>
-					<div className="text-5xl font-bold text-amber">
+				<div className="bg-espresso rounded-lg p-4 md:p-6 border border-coffee-medium">
+					<div className="text-cream-dark text-xs sm:text-sm mb-1">Grind Setting</div>
+					<div className="text-4xl md:text-5xl font-bold text-amber">
 						{formatGrindSetting()}
 					</div>
-					<div className="text-cream text-xs mt-1">
+					<div className="text-cream text-xs mt-1 truncate">
 						{grinder.brand} {grinder.model}
 					</div>
 				</div>
 			</div>
 
 			{/* Expected Output */}
-			<div className="grid grid-cols-3 gap-4">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
 				<div className="bg-espresso rounded-lg p-4 border border-coffee-medium">
 					<div className="text-cream-dark text-xs mb-1">Expected Yield</div>
-					<div className="text-2xl font-bold text-cream">
+					<div className="text-xl sm:text-2xl font-bold text-cream">
 						{result.expectedYieldG.toFixed(1)}g
 					</div>
 				</div>
 
 				<div className="bg-espresso rounded-lg p-4 border border-coffee-medium">
 					<div className="text-cream-dark text-xs mb-1">Brew Time</div>
-					<div className="text-2xl font-bold text-cream">
+					<div className="text-xl sm:text-2xl font-bold text-cream">
 						{result.expectedBrewTimeSec.min}-{result.expectedBrewTimeSec.max}s
 					</div>
 				</div>
@@ -123,7 +123,7 @@ ${result.tips.map((tip, i) => `${i + 1}. ${tip}`).join("\n")}
 						Brew Temp
 						{!hasPID && <span className="ml-1" title="Approximate with warmup/flush">*</span>}
 					</div>
-					<div className="text-2xl font-bold text-cream">
+					<div className="text-xl sm:text-2xl font-bold text-cream">
 						{result.recommendedTempC}°C
 					</div>
 				</div>
@@ -192,19 +192,29 @@ ${result.tips.map((tip, i) => `${i + 1}. ${tip}`).join("\n")}
 
 							{/* Adjustments */}
 							{result.reasoning.adjustments.length > 0 && (
-								<div className="space-y-1">
+								<div className="space-y-2">
 									<div className="text-xs font-medium text-cream">
 										Adjustments applied:
 									</div>
-									{result.reasoning.adjustments.map((adj, index) => (
-										<div
-											key={index}
-											className="flex justify-between text-xs text-cream-dark bg-espresso px-3 py-2 rounded"
-										>
-											<span>{adj.factor}</span>
-											<span className="text-amber">{adj.effect}</span>
-										</div>
-									))}
+									<table className="w-full text-xs border-collapse table-fixed">
+										<thead>
+											<tr className="border-b border-coffee-medium">
+												<th className="text-left py-2 pr-3 text-cream-dark font-medium" style={{width: '35%'}}>Factor</th>
+												<th className="text-right py-2 pl-3 text-cream-dark font-medium" style={{width: '65%'}}>Effect</th>
+											</tr>
+										</thead>
+										<tbody>
+											{result.reasoning.adjustments.map((adj, index) => (
+												<tr
+													key={index}
+													className="border-b border-coffee-medium/30 hover:bg-espresso transition-colors"
+												>
+													<td className="py-2.5 pr-3 text-cream-dark align-top break-words">{adj.factor}</td>
+													<td className="py-2.5 pl-3 text-amber font-mono text-right align-top break-words">{adj.effect}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
 								</div>
 							)}
 						</div>

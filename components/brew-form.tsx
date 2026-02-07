@@ -98,7 +98,7 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 	];
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-8">
+		<form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
 			{/* Bean Information */}
 			<section className="space-y-4">
 				<h2 className="text-2xl font-bold text-cream">Bean Information</h2>
@@ -108,11 +108,11 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 					<label className="block text-sm font-medium text-cream">
 						Bean Type
 					</label>
-					<div className="grid grid-cols-2 gap-2">
+					<div className="grid grid-cols-2 gap-3">
 						<button
 							type="button"
 							onClick={() => setBeanType("single-origin")}
-							className={`px-4 py-2 rounded-lg border transition-colors ${
+							className={`px-4 py-3 rounded-lg border transition-colors ${
 								beanType === "single-origin"
 									? "bg-amber border-amber text-espresso font-medium"
 									: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
@@ -123,7 +123,7 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 						<button
 							type="button"
 							onClick={() => setBeanType("blend")}
-							className={`px-4 py-2 rounded-lg border transition-colors ${
+							className={`px-4 py-3 rounded-lg border transition-colors ${
 								beanType === "blend"
 									? "bg-amber border-amber text-espresso font-medium"
 									: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
@@ -139,7 +139,7 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 					<label className="block text-sm font-medium text-cream">
 						Roast Level
 					</label>
-					<div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
 						{(
 							[
 								"light",
@@ -153,13 +153,19 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 								key={level}
 								type="button"
 								onClick={() => setRoastLevel(level)}
-								className={`px-4 py-2 rounded-lg border transition-colors capitalize ${
+								className={`px-3 py-3 rounded-lg border transition-colors text-xs sm:text-sm ${
 									roastLevel === level
 										? "bg-amber border-amber text-espresso font-medium"
 										: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
 								}`}
 							>
-								{level}
+								{level === "medium-light"
+									? "Med-Light"
+									: level === "medium-dark"
+										? "Med-Dark"
+										: level === "medium"
+											? "Med"
+											: level.charAt(0).toUpperCase() + level.slice(1)}
 							</button>
 						))}
 					</div>
@@ -225,7 +231,7 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 							<label className="block text-sm font-medium text-cream">
 								Blend Profile
 							</label>
-							<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 								{blendsData
 									.filter((b) => b.id !== "unknown")
 									.map((blend) => (
@@ -245,7 +251,7 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 												{blend.name}
 											</div>
 											<div
-												className={`text-xs mt-1 ${blendProfile === blend.id ? "text-espresso/80" : "text-cream-dark"}`}
+												className={`text-xs mt-1 line-clamp-2 ${blendProfile === blend.id ? "text-espresso/80" : "text-cream-dark"}`}
 											>
 												{blend.flavorNotes}
 											</div>
@@ -337,19 +343,19 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 					<label className="block text-sm font-medium text-cream">
 						Target Ratio (1:{ratio})
 					</label>
-					<div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+					<div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
 						{ratioPresets.map((preset) => (
 							<button
 								key={preset.ratio}
 								type="button"
 								onClick={() => setRatio(preset.ratio)}
-								className={`px-4 py-2 rounded-lg border transition-colors ${
+								className={`px-3 py-3 rounded-lg border transition-colors ${
 									ratio === preset.ratio
 										? "bg-amber border-amber text-espresso font-medium"
 										: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
 								}`}
 							>
-								<div className="text-sm">{preset.label}</div>
+								<div className="text-xs sm:text-sm">{preset.label}</div>
 								<div className="text-xs opacity-75">1:{preset.ratio}</div>
 							</button>
 						))}
@@ -401,26 +407,37 @@ export function BrewForm({ onCalculate }: BrewFormProps) {
 					<label className="block text-sm font-medium text-cream">
 						Taste Preference
 					</label>
-					<div className="grid grid-cols-2 gap-2">
+					<div className="grid grid-cols-2 gap-3">
 						{(["balanced", "body", "sweetness", "bright"] as const).map(
 							(pref) => (
 								<button
 									key={pref}
 									type="button"
 									onClick={() => setTastePreference(pref)}
-									className={`px-4 py-2 rounded-lg border transition-colors capitalize ${
+									className={`px-3 py-3 rounded-lg border transition-colors text-xs sm:text-sm ${
 										tastePreference === pref
 											? "bg-amber border-amber text-espresso font-medium"
 											: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
 									}`}
 								>
-									{pref === "body"
-										? "Body/Intensity"
-										: pref === "sweetness"
-											? "Sweetness/Clarity"
-											: pref === "bright"
-												? "Bright/Acidic"
-												: pref}
+									<span className="hidden sm:inline">
+										{pref === "body"
+											? "Body/Intensity"
+											: pref === "sweetness"
+												? "Sweetness/Clarity"
+												: pref === "bright"
+													? "Bright/Acidic"
+													: pref.charAt(0).toUpperCase() + pref.slice(1)}
+									</span>
+									<span className="sm:hidden">
+										{pref === "body"
+											? "Body"
+											: pref === "sweetness"
+												? "Sweet"
+												: pref === "bright"
+													? "Bright"
+													: pref.charAt(0).toUpperCase() + pref.slice(1)}
+									</span>
 								</button>
 							),
 						)}

@@ -169,20 +169,25 @@ export function ProfileForm({
 
 				<div className="space-y-2">
 					<label className="block text-sm font-medium text-cream">Type</label>
-					<div className="grid grid-cols-3 gap-2">
+					<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
 						{(["pressurized", "non-pressurized", "precision"] as const).map(
 							(type) => (
 								<button
 									key={type}
 									type="button"
 									onClick={() => setBasketType(type)}
-									className={`px-4 py-2 rounded-lg border transition-colors text-sm ${
+									className={`px-3 py-3 rounded-lg border transition-colors text-xs sm:text-sm ${
 										basketType === type
 											? "bg-amber border-amber text-espresso font-medium"
 											: "bg-coffee-dark border-coffee-medium text-cream hover:bg-coffee-medium"
 									}`}
 								>
-									{type === "precision" ? "IMS/VST" : type}
+									{type === "precision" ? "IMS/VST" : type === "non-pressurized" ? (
+										<>
+											<span className="hidden sm:inline">non-pressurized</span>
+											<span className="sm:hidden">non-press</span>
+										</>
+									) : type}
 								</button>
 							),
 						)}
@@ -209,20 +214,20 @@ export function ProfileForm({
 						<label className="block text-sm font-medium text-cream">
 							Capacity (g)
 						</label>
-						<div className="flex gap-2 items-center">
+						<div className="flex gap-3 items-center">
 							<input
 								type="number"
 								value={basketCapacityMin}
 								onChange={(e) => setBasketCapacityMin(parseInt(e.target.value))}
-								className="w-full px-3 py-2 bg-coffee-dark border border-coffee-medium rounded text-cream focus:outline-none focus:ring-2 focus:ring-amber"
+								className="w-full px-3 py-3 bg-coffee-dark border border-coffee-medium rounded text-cream focus:outline-none focus:ring-2 focus:ring-amber"
 								placeholder="Min"
 							/>
-							<span className="text-cream">-</span>
+							<span className="text-cream shrink-0">-</span>
 							<input
 								type="number"
 								value={basketCapacityMax}
 								onChange={(e) => setBasketCapacityMax(parseInt(e.target.value))}
-								className="w-full px-3 py-2 bg-coffee-dark border border-coffee-medium rounded text-cream focus:outline-none focus:ring-2 focus:ring-amber"
+								className="w-full px-3 py-3 bg-coffee-dark border border-coffee-medium rounded text-cream focus:outline-none focus:ring-2 focus:ring-amber"
 								placeholder="Max"
 							/>
 						</div>

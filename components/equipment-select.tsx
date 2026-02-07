@@ -42,7 +42,7 @@ export function EquipmentSelect<T extends { id: string }>({
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 w-full mt-2 bg-coffee-dark border border-coffee-medium rounded-lg shadow-lg max-h-64 overflow-hidden">
+          <div className="absolute z-50 w-full mt-2 bg-coffee-dark border border-coffee-medium rounded-lg shadow-lg max-h-[50vh] overflow-hidden">
             <div className="p-2 border-b border-coffee-medium">
               <input
                 type="text"
@@ -53,7 +53,7 @@ export function EquipmentSelect<T extends { id: string }>({
                 autoFocus
               />
             </div>
-            <div className="overflow-y-auto max-h-48">
+            <div className="overflow-y-auto max-h-[40vh]">
               {filteredItems.length === 0 ? (
                 <div className="px-4 py-3 text-cream-dark text-sm">
                   No results found
@@ -68,7 +68,7 @@ export function EquipmentSelect<T extends { id: string }>({
                       setIsOpen(false);
                       setSearch("");
                     }}
-                    className={`w-full px-4 py-2 text-left hover:bg-coffee-medium transition-colors ${
+                    className={`w-full px-4 py-3 text-left hover:bg-coffee-medium transition-colors text-sm ${
                       item.id === selectedId
                         ? "bg-coffee-medium text-amber"
                         : "text-cream"
