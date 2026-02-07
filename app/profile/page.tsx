@@ -4,7 +4,7 @@ import AdUnit from "@/components/ad-unit";
 import { ProfileForm } from "@/components/profile-form";
 import grindersData from "@/data/grinders.json";
 import machinesData from "@/data/machines.json";
-import { loadProfile, saveProfile } from "@/lib/profile";
+import { hasProfile, loadProfile, saveProfile } from "@/lib/profile";
 import type { GrinderData, MachineData, UserProfile } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useRef, useSyncExternalStore } from "react";
