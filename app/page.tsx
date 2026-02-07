@@ -2,10 +2,11 @@
 
 import AdUnit from "@/components/ad-unit";
 import { BrewForm } from "@/components/brew-form";
+import { FAQ } from "@/components/faq";
 import { ResultCard } from "@/components/result-card";
 import { WeatherBadge } from "@/components/weather-badge";
 import { calculateRecipe } from "@/lib/algorithm";
-import { hasProfile, loadProfile } from "@/lib/profile";
+import { useStoredProfile } from "@/lib/hooks/use-stored-profile";
 import type {
 	AlgorithmOutput,
 	BeanInfo,
@@ -15,57 +16,54 @@ import type {
 import { fetchWeather, getDefaultWeather } from "@/lib/weather";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-
-// Hook to read profile from localStorage using useSyncExternalStore
-function useStoredProfile() {
-	const cachedProfile = useRef<ReturnType<typeof loadProfile> | null>(null);
-	const cachedJson = useRef<string | null>(null);
-
-	const subscribe = useCallback((callback: () => void) => {
-		// Listen for both cross-window (storage) and same-window (localStorage-update) changes
-		window.addEventListener("storage", callback);
-		window.addEventListener("localStorage-update", callback);
-		return () => {
-			window.removeEventListener("storage", callback);
-			window.removeEventListener("localStorage-update", callback);
-		};
-	}, []);
-
-	const getSnapshot = useCallback(() => {
-		const currentJson = typeof window !== "undefined"
-			? localStorage.getItem("dial_profile")
-			: null;
-
-		// Only update cached profile if the underlying data changed
-		if (currentJson !== cachedJson.current) {
-			cachedJson.current = currentJson;
-			cachedProfile.current = hasProfile() ? loadProfile() : null;
-		}
-
-		return cachedProfile.current;
-	}, []);
-
-	const getServerSnapshot = useCallback(() => null, []);
-
-	return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-}
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
 	const router = useRouter();
 	const profile = useStoredProfile();
 	const [weather, setWeather] = useState<WeatherData | null>(null);
+	const [weatherLoading, setWeatherLoading] = useState(false);
+	const [weatherError, setWeatherError] = useState(false);
 	const [result, setResult] = useState<AlgorithmOutput | null>(null);
+	const isMountedRef = useRef(true);
+
+	// Track component mount status to prevent state updates on unmounted component
+	useEffect(() => {
+		isMountedRef.current = true;
+		return () => {
+			isMountedRef.current = false;
+		};
+	}, []);
 
 	// Fetch weather when profile is available
 	useEffect(() => {
 		if (!profile) return;
 
-		fetchWeather(profile.location.lat, profile.location.lon).then(
-			(weatherData) => {
+		const abortController = new AbortController();
+
+		setWeatherLoading(true);
+		setWeatherError(false);
+
+		fetchWeather(profile.location.lat, profile.location.lon)
+			.then((weatherData) => {
+				if (!isMountedRef.current || abortController.signal.aborted) return;
 				setWeather(weatherData || getDefaultWeather());
-			},
-		);
+				setWeatherError(false);
+			})
+			.catch((error) => {
+				if (!isMountedRef.current || abortController.signal.aborted) return;
+				console.error("Failed to fetch weather:", error);
+				setWeather(getDefaultWeather());
+				setWeatherError(true);
+			})
+			.finally(() => {
+				if (!isMountedRef.current || abortController.signal.aborted) return;
+				setWeatherLoading(false);
+			});
+
+		return () => {
+			abortController.abort();
+		};
 	}, [profile]);
 
 	// Show onboarding if no profile exists
@@ -73,7 +71,8 @@ export default function Home() {
 
 	const handleCalculate = (bean: BeanInfo, targets: BrewTargets) => {
 		if (!profile) {
-			alert("Please set up your profile first");
+			// This should never happen due to showOnboarding check, but just in case
+			router.push("/profile");
 			return;
 		}
 
@@ -135,9 +134,15 @@ export default function Home() {
 					<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
 						<h1 className="text-5xl md:text-6xl font-bold text-amber">Dial</h1>
 						<div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-							{weather && (
+							{weatherLoading ? (
+								<div className="text-sm text-cream-dark">Loading weather...</div>
+							) : weatherError ? (
+								<div className="text-sm text-yellow-600" title="Using default weather values">
+									Weather unavailable (using defaults)
+								</div>
+							) : weather ? (
 								<WeatherBadge weather={weather} city={profile?.location.city} />
-							)}
+							) : null}
 							<button
 								onClick={() => router.push("/profile")}
 								className="text-sm text-cream-dark hover:text-cream transition-colors"
@@ -210,6 +215,9 @@ export default function Home() {
 				>
 					<AdUnit slot="bottom-banner" format="auto" responsive={true} />
 				</motion.div>
+
+				{/* FAQ Section */}
+				<FAQ />
 
 				{/* Footer */}
 				<motion.footer

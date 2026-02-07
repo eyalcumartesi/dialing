@@ -4,58 +4,39 @@ import AdUnit from "@/components/ad-unit";
 import { ProfileForm } from "@/components/profile-form";
 import grindersData from "@/data/grinders.json";
 import machinesData from "@/data/machines.json";
-import { hasProfile, loadProfile, saveProfile } from "@/lib/profile";
+import { useStoredProfile } from "@/lib/hooks/use-stored-profile";
+import { saveProfile } from "@/lib/profile";
 import type { GrinderData, MachineData, UserProfile } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { useCallback, useRef, useSyncExternalStore } from "react";
-
-// Hook to read profile from localStorage using useSyncExternalStore
-function useStoredProfile() {
-	const cachedProfile = useRef<ReturnType<typeof loadProfile> | null>(null);
-	const cachedJson = useRef<string | null>(null);
-
-	const subscribe = useCallback((callback: () => void) => {
-		// Listen for both cross-window (storage) and same-window (localStorage-update) changes
-		window.addEventListener("storage", callback);
-		window.addEventListener("localStorage-update", callback);
-		return () => {
-			window.removeEventListener("storage", callback);
-			window.removeEventListener("localStorage-update", callback);
-		};
-	}, []);
-
-	const getSnapshot = useCallback(() => {
-		const currentJson = typeof window !== "undefined"
-			? localStorage.getItem("dial_profile")
-			: null;
-
-		// Only update cached profile if the underlying data changed
-		if (currentJson !== cachedJson.current) {
-			cachedJson.current = currentJson;
-			cachedProfile.current = hasProfile() ? loadProfile() : null;
-		}
-
-		return cachedProfile.current;
-	}, []);
-
-	const getServerSnapshot = useCallback(() => null, []);
-
-	return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-}
+import { useEffect, useRef, useState } from "react";
 
 export default function ProfilePage() {
 	const router = useRouter();
 	const currentProfile = useStoredProfile();
+	const [saveError, setSaveError] = useState<string | null>(null);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Clean up timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+		};
+	}, []);
 
 	const handleSave = (profile: UserProfile) => {
 		const success = saveProfile(profile);
 		if (success) {
 			router.push("/");
 		} else {
-			alert(
+			setSaveError(
 				"Could not save profile. localStorage may not be available. The app will still work, but your settings won't persist.",
 			);
-			router.push("/");
+			// Still redirect after showing error, but clean up properly
+			timeoutRef.current = setTimeout(() => {
+				router.push("/");
+			}, 3000);
 		}
 	};
 
@@ -71,6 +52,13 @@ export default function ProfilePage() {
 						Set up your espresso equipment once. We&apos;ll use this to
 						calculate your recipes.
 					</p>
+
+					{/* Error Message */}
+					{saveError && (
+						<div className="mt-4 p-4 bg-red-900/30 border border-red-700/50 rounded-lg">
+							<p className="text-red-200 text-sm">{saveError}</p>
+						</div>
+					)}
 				</div>
 
 				{/* Form */}
