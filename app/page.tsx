@@ -23,8 +23,13 @@ function useStoredProfile() {
 	const cachedJson = useRef<string | null>(null);
 
 	const subscribe = useCallback((callback: () => void) => {
+		// Listen for both cross-window (storage) and same-window (localStorage-update) changes
 		window.addEventListener("storage", callback);
-		return () => window.removeEventListener("storage", callback);
+		window.addEventListener("localStorage-update", callback);
+		return () => {
+			window.removeEventListener("storage", callback);
+			window.removeEventListener("localStorage-update", callback);
+		};
 	}, []);
 
 	const getSnapshot = useCallback(() => {

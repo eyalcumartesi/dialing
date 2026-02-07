@@ -1,6 +1,6 @@
 import type { UserProfile } from "./types";
 
-const PROFILE_KEY = "dial_user_profile";
+const PROFILE_KEY = "dial_profile";
 
 /**
  * Check if localStorage is available
@@ -27,6 +27,11 @@ export function saveProfile(profile: UserProfile): boolean {
 
 	try {
 		localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+		// Dispatch custom event for same-window localStorage updates
+		// (storage event only fires for cross-window changes)
+		if (typeof window !== "undefined") {
+			window.dispatchEvent(new Event("localStorage-update"));
+		}
 		return true;
 	} catch (error) {
 		console.error("Failed to save profile:", error);
@@ -66,6 +71,10 @@ export function clearProfile(): boolean {
 
 	try {
 		localStorage.removeItem(PROFILE_KEY);
+		// Dispatch custom event for same-window localStorage updates
+		if (typeof window !== "undefined") {
+			window.dispatchEvent(new Event("localStorage-update"));
+		}
 		return true;
 	} catch (error) {
 		console.error("Failed to clear profile:", error);
