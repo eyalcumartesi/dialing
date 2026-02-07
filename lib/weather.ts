@@ -2,6 +2,11 @@ import type { WeatherData } from "./types";
 
 const CACHE_KEY = "dial_weather_cache";
 const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 minutes
+/**
+ * Location tolerance for weather cache in degrees.
+ * 0.01 degrees ≈ 1.1 km at equator, sufficient for local weather consistency.
+ */
+const LOCATION_TOLERANCE_DEGREES = 0.01;
 
 interface WeatherCache {
 	data: WeatherData;
@@ -27,8 +32,8 @@ function isCacheValid(cache: WeatherCache, lat: number, lon: number): boolean {
 	// Check if cache is fresh and location matches
 	return (
 		age < CACHE_DURATION_MS &&
-		Math.abs(cache.lat - lat) < 0.01 &&
-		Math.abs(cache.lon - lon) < 0.01
+		Math.abs(cache.lat - lat) < LOCATION_TOLERANCE_DEGREES &&
+		Math.abs(cache.lon - lon) < LOCATION_TOLERANCE_DEGREES
 	);
 }
 
@@ -43,13 +48,35 @@ function getCachedWeather(lat: number, lon: number): WeatherData | null {
 		}
 
 		const cache = JSON.parse(cached) as WeatherCache;
+
+		// Validate cache structure to prevent corrupted data issues
+		if (
+			!cache ||
+			typeof cache !== "object" ||
+			!cache.data ||
+			cache.timestamp === undefined ||
+			cache.lat === undefined ||
+			cache.lon === undefined
+		) {
+			console.warn("Invalid weather cache structure, clearing cache");
+			localStorage.removeItem(CACHE_KEY);
+			return null;
+		}
+
 		if (isCacheValid(cache, lat, lon)) {
 			return cache.data;
 		}
 
 		// Cache expired or location changed
 		return null;
-	} catch {
+	} catch (error) {
+		// Clear corrupted cache on parse error
+		console.error("Failed to parse weather cache, clearing:", error);
+		try {
+			localStorage.removeItem(CACHE_KEY);
+		} catch {
+			// Silently fail if localStorage is unavailable
+		}
 		return null;
 	}
 }
@@ -77,6 +104,7 @@ function cacheWeather(data: WeatherData, lat: number, lon: number): void {
 export async function fetchWeather(
 	lat: number,
 	lon: number,
+	signal?: AbortSignal,
 ): Promise<WeatherData | null> {
 	// Check cache first
 	const cached = getCachedWeather(lat, lon);
@@ -95,7 +123,7 @@ export async function fetchWeather(
 
 	try {
 		const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-		const response = await fetch(url);
+		const response = await fetch(url, { signal });
 
 		if (!response.ok) {
 			console.error("Weather API request failed:", response.statusText);
@@ -103,6 +131,22 @@ export async function fetchWeather(
 		}
 
 		const data = (await response.json()) as OpenWeatherMapResponse;
+
+		// Validate response structure and numeric types to prevent NaN propagation
+		if (
+			!data ||
+			typeof data !== "object" ||
+			!data.main ||
+			typeof data.main !== "object" ||
+			typeof data.main.temp !== "number" ||
+			typeof data.main.humidity !== "number" ||
+			isNaN(data.main.temp) ||
+			isNaN(data.main.humidity)
+		) {
+			console.error("Invalid OpenWeatherMap response structure:", data);
+			return null;
+		}
+
 		const weatherData: WeatherData = {
 			temperatureC: data.main.temp,
 			humidity: data.main.humidity,

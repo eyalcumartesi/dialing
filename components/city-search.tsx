@@ -2,7 +2,7 @@
 
 import { findNearestCity, searchCities } from "@/lib/geodb-cities";
 import type { CityData } from "@/lib/types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CitySearchProps {
 	onSelectCity: (city: CityData) => void;
@@ -16,6 +16,37 @@ export function CitySearch({ onSelectCity, selectedCity }: CitySearchProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isDetecting, setIsDetecting] = useState(false);
 	const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const searchAbortControllerRef = useRef<AbortController | null>(null);
+	const isMountedRef = useRef(true);
+
+	// Track mounted state and cleanup on unmount
+	useEffect(() => {
+		isMountedRef.current = true;
+		return () => {
+			isMountedRef.current = false;
+			if (searchTimeoutRef.current) {
+				clearTimeout(searchTimeoutRef.current);
+			}
+			if (searchAbortControllerRef.current) {
+				searchAbortControllerRef.current.abort();
+			}
+		};
+	}, []);
+
+	// Handle Escape key to close dropdown
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				setIsOpen(false);
+				setSearchTerm("");
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [isOpen]);
 
 	// Derive display value: show selected city or current search term
 	const displayValue =
@@ -25,9 +56,12 @@ export function CitySearch({ onSelectCity, selectedCity }: CitySearchProps) {
 	const handleSearchChange = (value: string) => {
 		setSearchTerm(value);
 
-		// Clear previous timeout
+		// Clear previous timeout and abort previous search
 		if (searchTimeoutRef.current) {
 			clearTimeout(searchTimeoutRef.current);
+		}
+		if (searchAbortControllerRef.current) {
+			searchAbortControllerRef.current.abort();
 		}
 
 		if (value.length < 2) {
@@ -38,11 +72,31 @@ export function CitySearch({ onSelectCity, selectedCity }: CitySearchProps) {
 
 		// Set new timeout for debounced search
 		searchTimeoutRef.current = setTimeout(async () => {
+			if (!isMountedRef.current) return;
+
+			// Create new AbortController for this search
+			searchAbortControllerRef.current = new AbortController();
+
 			setIsLoading(true);
-			const results = await searchCities(value, 10);
-			setCities(results);
-			setIsOpen(results.length > 0);
-			setIsLoading(false);
+			try {
+				const results = await searchCities(
+					value,
+					10,
+					searchAbortControllerRef.current.signal
+				);
+				// Check if still mounted and not aborted after async operation
+				if (!isMountedRef.current || searchAbortControllerRef.current.signal.aborted) return;
+				setCities(results);
+				setIsOpen(results.length > 0);
+			} catch (error) {
+				// Ignore abort errors
+				if (error instanceof Error && error.name === "AbortError") return;
+				console.error("City search error:", error);
+			} finally {
+				if (isMountedRef.current && !searchAbortControllerRef.current?.signal.aborted) {
+					setIsLoading(false);
+				}
+			}
 		}, 300);
 	};
 
@@ -63,6 +117,9 @@ export function CitySearch({ onSelectCity, selectedCity }: CitySearchProps) {
 					// Find nearest city using GeoDB
 					const nearestCity = await findNearestCity(latitude, longitude, 100);
 
+					// Check if still mounted after async operation
+					if (!isMountedRef.current) return;
+
 					if (nearestCity) {
 						handleSelectCity(nearestCity);
 					} else {
@@ -82,6 +139,7 @@ export function CitySearch({ onSelectCity, selectedCity }: CitySearchProps) {
 					setIsDetecting(false);
 				},
 				(error) => {
+					if (!isMountedRef.current) return;
 					console.error("Geolocation error:", error);
 					alert(
 						"Could not detect location. Please search for your city manually.",

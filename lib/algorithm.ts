@@ -11,11 +11,55 @@ import type {
 	VarietalData,
 } from "./types";
 
+// === ALGORITHM CONSTANTS ===
+/**
+ * Fallback micron-per-step value when grinder doesn't specify.
+ * Conservative estimate for grinders without calibration data.
+ */
+const FALLBACK_MICRON_PER_STEP = 10;
+
 /**
  * Pure function to calculate espresso recipe recommendation
  * All inputs are passed as arguments - no side effects
  */
 export function calculateRecipe(input: AlgorithmInput): AlgorithmOutput {
+	// === INPUT VALIDATION ===
+	// Validate basket capacity
+	if (input.profile.basket.capacityMinG > input.profile.basket.capacityMaxG) {
+		throw new Error(
+			`Invalid basket capacity: min (${input.profile.basket.capacityMinG}g) > max (${input.profile.basket.capacityMaxG}g)`
+		);
+	}
+
+	// Validate grinder range
+	if (
+		input.profile.grinder.espressoRangeMin >=
+		input.profile.grinder.espressoRangeMax
+	) {
+		throw new Error(
+			`Invalid grinder range: min (${input.profile.grinder.espressoRangeMin}) >= max (${input.profile.grinder.espressoRangeMax})`
+		);
+	}
+
+	// Validate roast date
+	if (input.bean.roastDateDaysAgo < 0) {
+		throw new Error(
+			`Invalid roast date: cannot be in the future (${input.bean.roastDateDaysAgo} days ago)`
+		);
+	}
+
+	// Validate ratio
+	if (input.targets.ratio <= 0 || !Number.isFinite(input.targets.ratio)) {
+		throw new Error(`Invalid ratio: must be a positive number (got ${input.targets.ratio})`);
+	}
+
+	// Validate brew time range
+	if (input.targets.brewTimeMinSec >= input.targets.brewTimeMaxSec) {
+		throw new Error(
+			`Invalid brew time range: min (${input.targets.brewTimeMinSec}s) >= max (${input.targets.brewTimeMaxSec}s)`
+		);
+	}
+
 	const adjustments: Adjustment[] = [];
 
 	// ========== DOSE CALCULATION ==========
@@ -158,12 +202,27 @@ function micronsToSteps(
 	microns: number,
 	grinder: AlgorithmInput["profile"]["grinder"],
 ): number {
+	// Validate inputs to prevent NaN propagation
+	if (!Number.isFinite(microns)) {
+		console.warn(`Invalid microns value: ${microns}, returning 0`);
+		return 0;
+	}
+
 	if (grinder.micronPerStep && grinder.micronPerStep > 0) {
 		return microns / grinder.micronPerStep;
 	}
 	// Fallback: estimate from range size. Assume the espresso range spans
 	// roughly 200-400 microns total (typical for most grinders).
 	const rangeSteps = grinder.espressoRangeMax - grinder.espressoRangeMin;
+
+	// Guard against invalid grinder range (division by zero)
+	if (rangeSteps <= 0) {
+		console.warn(
+			`Invalid grinder range for ${grinder.brand} ${grinder.model}: min=${grinder.espressoRangeMin}, max=${grinder.espressoRangeMax}. Using fallback.`
+		);
+		return microns / FALLBACK_MICRON_PER_STEP;
+	}
+
 	const estimatedTotalMicrons = rangeSteps > 30 ? 400 : 300;
 	const estimatedMicronPerStep = estimatedTotalMicrons / rangeSteps;
 	return microns / estimatedMicronPerStep;
@@ -266,17 +325,24 @@ function calculateGrindSetting(
 
 	// Natural process beans degas ~20% faster
 	if (processMethod === "natural" && roastDateDaysAgo <= 6) {
-		freshnessMicrons = Math.round(freshnessMicrons * 0.8);
-		freshnessLabel += " (natural process degasses faster)";
+		const adjusted = Math.round(freshnessMicrons * 0.8);
+		// Guard against NaN propagation
+		if (Number.isFinite(adjusted)) {
+			freshnessMicrons = adjusted;
+			freshnessLabel += " (natural process degasses faster)";
+		}
 	}
 
-	if (freshnessMicrons !== 0) {
+	if (freshnessMicrons !== 0 && Number.isFinite(freshnessMicrons)) {
 		const steps = micronsToSteps(freshnessMicrons, grinder);
-		setting += steps;
-		adjustments.push({
-			factor: freshnessLabel,
-			effect: `${freshnessMicrons > 0 ? "Coarser" : "Finer"} by ~${Math.abs(steps).toFixed(1)} steps`,
-		});
+		// Additional NaN guard for the steps calculation
+		if (Number.isFinite(steps)) {
+			setting += steps;
+			adjustments.push({
+				factor: freshnessLabel,
+				effect: `${freshnessMicrons > 0 ? "Coarser" : "Finer"} by ~${Math.abs(steps).toFixed(1)} steps`,
+			});
+		}
 	}
 
 	// === Process Method ===

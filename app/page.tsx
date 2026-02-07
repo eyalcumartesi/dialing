@@ -39,25 +39,56 @@ export default function Home() {
 	useEffect(() => {
 		if (!profile) return;
 
+		// Capture ENTIRE location object to detect race conditions
+		// This prevents accessing profile.location after it might have changed
+		const requestLocation = {
+			lat: profile.location.lat,
+			lon: profile.location.lon,
+		};
 		const abortController = new AbortController();
 
 		setWeatherLoading(true);
 		setWeatherError(false);
 
-		fetchWeather(profile.location.lat, profile.location.lon)
+		fetchWeather(requestLocation.lat, requestLocation.lon, abortController.signal)
 			.then((weatherData) => {
+				// Guard against race condition: only update if location hasn't changed
 				if (!isMountedRef.current || abortController.signal.aborted) return;
+				if (
+					profile.location.lat !== requestLocation.lat ||
+					profile.location.lon !== requestLocation.lon
+				) {
+					console.log("Weather fetch aborted: location changed");
+					return;
+				}
+
 				setWeather(weatherData || getDefaultWeather());
 				setWeatherError(false);
 			})
 			.catch((error) => {
 				if (!isMountedRef.current || abortController.signal.aborted) return;
+				// Also check location hasn't changed for error handling
+				if (
+					profile.location.lat !== requestLocation.lat ||
+					profile.location.lon !== requestLocation.lon
+				) {
+					return;
+				}
+
 				console.error("Failed to fetch weather:", error);
 				setWeather(getDefaultWeather());
 				setWeatherError(true);
 			})
 			.finally(() => {
 				if (!isMountedRef.current || abortController.signal.aborted) return;
+				// Check location one more time before clearing loading state
+				if (
+					profile.location.lat !== requestLocation.lat ||
+					profile.location.lon !== requestLocation.lon
+				) {
+					return;
+				}
+
 				setWeatherLoading(false);
 			});
 
@@ -135,9 +166,14 @@ export default function Home() {
 						<h1 className="text-5xl md:text-6xl font-bold text-amber">Dial</h1>
 						<div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
 							{weatherLoading ? (
-								<div className="text-sm text-cream-dark">Loading weather...</div>
+								<div className="text-sm text-cream-dark">
+									Loading weather...
+								</div>
 							) : weatherError ? (
-								<div className="text-sm text-yellow-600" title="Using default weather values">
+								<div
+									className="text-sm text-yellow-600"
+									title="Using default weather values"
+								>
 									Weather unavailable (using defaults)
 								</div>
 							) : weather ? (
@@ -187,7 +223,11 @@ export default function Home() {
 					{/* Result */}
 					<div id="result">
 						{result && profile ? (
-							<ResultCard result={result} grinder={profile.grinder} hasPID={profile.machine.hasPID} />
+							<ResultCard
+								result={result}
+								grinder={profile.grinder}
+								hasPID={profile.machine.hasPID}
+							/>
 						) : (
 							<motion.div
 								initial={{ opacity: 0 }}

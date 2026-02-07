@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Navigation } from "@/components/navigation";
 import "./globals.css";
 
 const baseUrl =
@@ -129,6 +130,7 @@ export default function RootLayout({
 					/>
 				)}
 
+				<Navigation />
 				<div className="relative z-10">{children}</div>
 			</body>
 		</html>

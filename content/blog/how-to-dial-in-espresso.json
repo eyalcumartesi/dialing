@@ -1,0 +1,18 @@
+{
+  "slug": "how-to-dial-in-espresso",
+  "title": "How to Dial In Espresso: Complete Beginner's Guide",
+  "excerpt": "Master the art of dialing in espresso with this step-by-step guide. Learn how to adjust grind size, dose, and brew time for perfect shots every time.",
+  "content": "<h2>What is Dialing In?</h2><p>Dialing in espresso is the process of making small adjustments to your grind size, dose, and brew time to achieve the perfect extraction. It's both an art and a science, requiring patience and attention to detail.</p><h2>The Three Variables</h2><p>There are three main variables you'll adjust when dialing in:</p><ul><li><strong>Grind Size</strong>: Finer grinds slow down extraction, coarser grinds speed it up</li><li><strong>Dose</strong>: The amount of coffee (typically 16-20g for double shots)</li><li><strong>Brew Time</strong>: Target 25-30 seconds for most medium roasts</li></ul><h2>Step-by-Step Process</h2><h3>1. Start with a Baseline</h3><p>Use our calculator to get a recommended starting point based on your equipment and beans. This saves time and gets you close to the target immediately.</p><h3>2. Pull a Shot and Taste</h3><p>Pay attention to:</p><ul><li>Brew time (aim for 25-30 seconds)</li><li>Flow rate (should be smooth and steady)</li><li>Taste (balanced, sweet, not sour or bitter)</li></ul><h3>3. Make Adjustments</h3><p>If your shot is:</p><ul><li><strong>Sour/Under-extracted</strong>: Grind finer or increase dose</li><li><strong>Bitter/Over-extracted</strong>: Grind coarser or decrease dose</li><li><strong>Too fast (&lt;20s)</strong>: Grind finer</li><li><strong>Too slow (&gt;35s)</strong>: Grind coarser</li></ul><h3>4. Repeat Until Perfect</h3><p>Make one change at a time and pull another shot. Keep notes on what works and what doesn't.</p><h2>Pro Tips</h2><blockquote>The biggest mistake beginners make is changing multiple variables at once. Always adjust one thing at a time!</blockquote><ul><li>Use fresh beans (7-21 days post-roast is ideal)</li><li>Weigh your dose and output for consistency</li><li>Keep your equipment clean for better flavor</li><li>Temperature matters: darker roasts need lower temps (88-91°C)</li></ul><h2>Use Our Calculator</h2><p>Skip the guesswork and get a personalized starting point with our <a href=\"/\">espresso calculator</a>. It factors in your specific equipment, beans, and environment to recommend optimal settings.</p>",
+  "category": "Brewing Guides",
+  "tags": ["dial-in", "beginner", "espresso-basics", "extraction"],
+  "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=630&fit=crop",
+  "author": "Dial Team",
+  "publishedAt": "2025-02-07",
+  "readTime": "6 min",
+  "featured": true,
+  "seo": {
+    "metaTitle": "How to Dial In Espresso: Step-by-Step Guide (2025)",
+    "metaDescription": "Learn how to dial in espresso like a pro. Complete guide covering grind size, dose, brew time, and troubleshooting for perfect shots every time.",
+    "keywords": ["how to dial in espresso", "espresso extraction", "grind size adjustment", "perfect espresso shot"]
+  }
+}

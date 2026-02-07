@@ -73,3 +73,87 @@ h1, h2, h3, h4, h5, h6 {
 html {
   scroll-behavior: smooth;
 }
+
+/* Blog prose styles */
+.prose {
+  color: var(--cream);
+}
+
+.prose h2 {
+  color: var(--amber);
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.prose h3 {
+  color: var(--cream);
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: var(--cream-dark);
+}
+
+.prose strong {
+  color: var(--cream);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  color: var(--cream-dark);
+}
+
+.prose a {
+  color: var(--amber);
+  text-decoration: none;
+  border-bottom: 1px solid var(--amber);
+  transition: all 0.2s;
+}
+
+.prose a:hover {
+  color: var(--amber-dark);
+  border-bottom-color: var(--amber-dark);
+}
+
+.prose code {
+  background: var(--coffee-medium);
+  color: var(--amber);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose pre {
+  background: var(--coffee-medium);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--amber);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--cream-dark);
+}

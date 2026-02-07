@@ -33,7 +33,11 @@ export default function ProfilePage() {
 			setSaveError(
 				"Could not save profile. localStorage may not be available. The app will still work, but your settings won't persist.",
 			);
-			// Still redirect after showing error, but clean up properly
+			// Clear any existing timeout before setting a new one
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+			// Still redirect after showing error
 			timeoutRef.current = setTimeout(() => {
 				router.push("/");
 			}, 3000);

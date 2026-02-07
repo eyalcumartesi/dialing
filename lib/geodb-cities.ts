@@ -2,6 +2,7 @@ import type { CityData } from "./types";
 
 const GEODB_BASE_URL = "https://wft-geo-db.p.rapidapi.com/v1/geo";
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+const MAX_CACHE_SIZE = 100; // Limit cache size to prevent memory leaks
 
 interface GeoCityResponse {
 	id: number;
@@ -26,8 +27,25 @@ interface GeoDBResponse {
 	};
 }
 
-// Simple in-memory cache
+// Simple in-memory cache with size limiting
 const cache = new Map<string, { data: CityData[]; timestamp: number }>();
+
+/**
+ * Manage cache size by removing oldest entries when limit is reached
+ * Uses FIFO eviction strategy
+ */
+function pruneCache() {
+	// Remove entries until we're below the limit, leaving room for new entry
+	// This prevents cache from growing beyond MAX_CACHE_SIZE in rapid-fire scenarios
+	while (cache.size >= MAX_CACHE_SIZE) {
+		const firstKey = cache.keys().next().value;
+		if (firstKey) {
+			cache.delete(firstKey);
+		} else {
+			break; // Safety: prevent infinite loop
+		}
+	}
+}
 
 /**
  * Search cities by name prefix using GeoDB Cities API
@@ -36,16 +54,10 @@ const cache = new Map<string, { data: CityData[]; timestamp: number }>();
 export async function searchCities(
 	namePrefix: string,
 	limit: number = 10,
+	signal?: AbortSignal,
 ): Promise<CityData[]> {
 	if (!namePrefix || namePrefix.length < 2) {
 		return [];
-	}
-
-	// Check cache
-	const cacheKey = `${namePrefix.toLowerCase()}-${limit}`;
-	const cached = cache.get(cacheKey);
-	if (cached && Date.now() - cached.timestamp < CACHE_DURATION_MS) {
-		return cached.data;
 	}
 
 	// Check if API key is available
@@ -66,6 +78,13 @@ export async function searchCities(
 			types: "CITY", // Only cities, not administrative regions
 		});
 
+		// Create deterministic cache key from actual params to ensure consistency
+		const cacheKey = `search:${namePrefix.toLowerCase()}|limit:${params.get("limit")}|offset:${params.get("offset")}|sort:${params.get("sort")}|types:${params.get("types")}`;
+		const cached = cache.get(cacheKey);
+		if (cached && Date.now() - cached.timestamp < CACHE_DURATION_MS) {
+			return cached.data;
+		}
+
 		const url = `${GEODB_BASE_URL}/places?${params.toString()}`;
 
 		const response = await fetch(url, {
@@ -74,6 +93,7 @@ export async function searchCities(
 				"x-rapidapi-key": apiKey,
 				"x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
 			},
+			signal,
 		});
 
 		if (!response.ok) {
@@ -83,18 +103,36 @@ export async function searchCities(
 
 		const data = (await response.json()) as GeoDBResponse;
 
-		// Transform to our CityData format
-		const cities: CityData[] = data.data.map((city) => ({
-			id: city.id,
-			name: city.city || city.name,
-			country: city.country,
-			countryCode: city.countryCode,
-			region: city.region,
-			latitude: city.latitude,
-			longitude: city.longitude,
-		}));
+		// Validate response structure
+		if (!data || !data.data || !Array.isArray(data.data)) {
+			console.error("Invalid GeoDB response structure:", data);
+			return [];
+		}
 
-		// Cache the result
+		// Transform to our CityData format
+		const cities: CityData[] = data.data
+			.filter((city) => {
+				// Filter out invalid city entries
+				return (
+					city &&
+					typeof city === "object" &&
+					(city.city || city.name) &&
+					city.latitude !== undefined &&
+					city.longitude !== undefined
+				);
+			})
+			.map((city) => ({
+				id: city.id,
+				name: city.city || city.name,
+				country: city.country,
+				countryCode: city.countryCode,
+				region: city.region,
+				latitude: city.latitude,
+				longitude: city.longitude,
+			}));
+
+		// Cache the result (prune first to prevent unbounded growth)
+		pruneCache();
 		cache.set(cacheKey, { data: cities, timestamp: Date.now() });
 
 		return cities;
@@ -107,7 +145,10 @@ export async function searchCities(
 /**
  * Get city details by ID
  */
-export async function getCityById(cityId: number): Promise<CityData | null> {
+export async function getCityById(
+	cityId: number,
+	signal?: AbortSignal,
+): Promise<CityData | null> {
 	const apiKey = process.env.NEXT_PUBLIC_GEODB_API_KEY;
 	if (!apiKey) {
 		return null;
@@ -122,6 +163,7 @@ export async function getCityById(cityId: number): Promise<CityData | null> {
 				"x-rapidapi-key": apiKey,
 				"x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
 			},
+			signal,
 		});
 
 		if (!response.ok) {
@@ -130,7 +172,25 @@ export async function getCityById(cityId: number): Promise<CityData | null> {
 		}
 
 		const data = (await response.json()) as { data: GeoCityResponse };
+
+		// Validate response structure
+		if (!data || !data.data || typeof data.data !== "object") {
+			console.error("Invalid GeoDB response structure:", data);
+			return null;
+		}
+
 		const city = data.data;
+
+		// Validate city data
+		if (
+			!city ||
+			!(city.city || city.name) ||
+			city.latitude === undefined ||
+			city.longitude === undefined
+		) {
+			console.error("Invalid city data in response:", city);
+			return null;
+		}
 
 		return {
 			id: city.id,
@@ -154,6 +214,7 @@ export async function findNearestCity(
 	latitude: number,
 	longitude: number,
 	radiusKm: number = 50,
+	signal?: AbortSignal,
 ): Promise<CityData | null> {
 	const apiKey = process.env.NEXT_PUBLIC_GEODB_API_KEY;
 	if (!apiKey) {
@@ -177,6 +238,7 @@ export async function findNearestCity(
 				"x-rapidapi-key": apiKey,
 				"x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
 			},
+			signal,
 		});
 
 		if (!response.ok) {
@@ -186,11 +248,29 @@ export async function findNearestCity(
 
 		const data = (await response.json()) as GeoDBResponse;
 
+		// Validate response structure
+		if (!data || !data.data || !Array.isArray(data.data)) {
+			console.error("Invalid GeoDB response structure:", data);
+			return null;
+		}
+
 		if (data.data.length === 0) {
 			return null;
 		}
 
 		const city = data.data[0];
+
+		// Validate city data
+		if (
+			!city ||
+			!(city.city || city.name) ||
+			city.latitude === undefined ||
+			city.longitude === undefined
+		) {
+			console.error("Invalid city data in response:", city);
+			return null;
+		}
+
 		return {
 			id: city.id,
 			name: city.city || city.name,
