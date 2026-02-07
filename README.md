@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dial — Espresso Recipe Calculator
+
+A modern, deterministic espresso dial-in calculator that recommends grind size and dose based on your equipment, beans, and environment.
+
+![Coffee theme with specialty instrument panel aesthetic](https://via.placeholder.com/800x400/1a1209/c87941?text=Dial)
+
+## Features
+
+- **Personalized Recommendations**: Get precise dose and grind settings based on your specific equipment
+- **Equipment Database**: Pre-configured specs for 20+ espresso machines and 18+ grinders
+- **Weather Integration**: Real-time weather adjustments (humidity and temperature affect extraction)
+- **Deterministic Algorithm**: Rules-based calculations you can understand and trust
+- **Beautiful UI**: Dark coffee theme with smooth animations
+- **Mobile-First**: Optimized for use at your coffee station
+- **No Backend**: All data stored locally in your browser
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ and pnpm (or npm/yarn)
+- (Optional) OpenWeatherMap API key for weather-based adjustments
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd dialing
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. (Optional but recommended) Set up API keys:
+```bash
+cp .env.example .env.local
+```
+Then edit `.env.local` and add your API keys:
+- **OpenWeatherMap** - Get a free key at https://openweathermap.org/api (for weather-based extraction adjustments)
+- **GeoDB Cities** - Get a free key at https://rapidapi.com/wirefreethought/api/geodb-cities (for city search autocomplete, 86k requests/day free)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+pnpm dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-To learn more about Next.js, take a look at the following resources:
+## How It Works
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Set Up Your Profile
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Enter your equipment once:
+- **Machine**: Brand, model, pressure, boiler type, etc.
+- **Grinder**: Brand, model, burr type, setting range
+- **Basket**: Type (pressurized/non-pressurized/precision), size, capacity
+- **Location**: For weather data (auto-detected or manual)
 
-## Deploy on Vercel
+### 2. Enter Bean Details
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For each brew session:
+- Roast level and date
+- Process method (washed, natural, etc.)
+- Origin and varietal (optional)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Set Your Preferences
+
+- **Target ratio**: Ristretto (1:1.5) to Lungo (1:3)
+- **Brew time**: Your desired extraction time range
+- **Taste preference**: Balanced, body, sweetness, or bright
+
+### 4. Get Your Recipe
+
+The algorithm calculates:
+- **Dose**: Based on basket capacity and bean density
+- **Grind setting**: Adjusted for roast, freshness, pressure, humidity, and more
+- **Expected yield and brew time**
+- **Contextual tips**: Specific to your setup and conditions
+
+## The Algorithm
+
+The calculator uses a deterministic, rules-based algorithm. Key factors:
+
+**Dose Calculation:**
+- Basket capacity baseline
+- Roast level density adjustment
+- Rounded to nearest 0.5g
+
+**Grind Setting Calculation:**
+- Starts at grinder's espresso range midpoint
+- Applies adjustments for:
+  - Roast level (±8%)
+  - Bean freshness (±3%)
+  - Process method (±2%)
+  - Machine pressure (±5%)
+  - Water debit rate (±5%)
+  - Basket type (±20% for pressurized)
+  - Humidity (±2%)
+  - Temperature (±1%)
+  - Taste preference (±3%)
+  - Target ratio (±2%)
+- Converts to grinder's actual setting scale
+
+All reasoning is transparent and shown in the UI.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Fonts**: Playfair Display (headings) + DM Sans (body)
+- **Data Storage**: localStorage
+- **Weather API**: OpenWeatherMap (optional)
+
+## Project Structure
+
+```
+/app
+  /page.tsx              → Main calculator page
+  /profile/page.tsx      → Equipment profile setup
+  /layout.tsx            → Root layout
+  /globals.css           → Tailwind + custom styles
+/components
+  /brew-form.tsx         → Bean info input form
+  /result-card.tsx       → Recipe display
+  /profile-form.tsx      → Equipment setup form
+  /equipment-select.tsx  → Searchable dropdowns
+  /weather-badge.tsx     → Weather display
+  /freshness-indicator.tsx → Roast date badge
+/lib
+  /algorithm.ts          → Pure recipe calculation
+  /weather.ts            → Weather API + caching
+  /profile.ts            → localStorage helpers
+  /types.ts              → TypeScript interfaces
+/data
+  /machines.json         → Machine database
+  /grinders.json         → Grinder database
+```
+
+## Contributing
+
+Want to add your espresso machine or grinder to the database?
+
+1. Edit `/data/machines.json` or `/data/grinders.json`
+2. Follow the existing format
+3. Submit a pull request
+
+## License
+
+MIT
+
+## Acknowledgments
+
+Built for coffee nerds who want to understand their espresso, not just follow blind recipes.

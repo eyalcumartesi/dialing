@@ -1,0 +1,254 @@
+[
+	{
+		"id": "typica",
+		"name": "Typica",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium",
+			"beanSize": "medium",
+			"solubility": "medium",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": 0,
+		"flavorProfile": "Clean, sweet, floral with citrus notes. Mild balanced acidity with dried fruit and stone fruit.",
+		"notes": "The 'blueprint' variety - baseline for extraction"
+	},
+	{
+		"id": "bourbon",
+		"name": "Bourbon",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium-high",
+			"beanSize": "medium",
+			"solubility": "high",
+			"sugarContent": "high"
+		},
+		"extractionModifier": -2,
+		"flavorProfile": "Brown sugar sweetness, cherry and peach notes, round body",
+		"notes": "Higher sugar content requires finer grind for full extraction"
+	},
+	{
+		"id": "gesha",
+		"name": "Gesha / Geisha",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "low",
+			"beanSize": "large",
+			"solubility": "very-high",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": 4,
+		"flavorProfile": "Jasmine, citrus, tea-like, delicate floral aromas",
+		"notes": "Low density and large beans - grind coarser to avoid over-extraction"
+	},
+	{
+		"id": "caturra",
+		"name": "Caturra",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "high",
+			"beanSize": "small",
+			"solubility": "medium",
+			"sugarContent": "medium-low"
+		},
+		"extractionModifier": -3,
+		"flavorProfile": "Bright citric acidity, less body than Bourbon, crisp",
+		"notes": "Small dense beans - grind finer for adequate extraction"
+	},
+	{
+		"id": "catuai",
+		"name": "Catuai",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium-high",
+			"beanSize": "small-medium",
+			"solubility": "medium",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": -1,
+		"flavorProfile": "Sweet, citrus, chocolate notes with medium body",
+		"notes": "Hybrid of Mundo Novo and Caturra"
+	},
+	{
+		"id": "sl28",
+		"name": "SL28",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium-high",
+			"beanSize": "medium",
+			"solubility": "very-high",
+			"sugarContent": "high"
+		},
+		"extractionModifier": 2,
+		"flavorProfile": "Vibrant acidity, black currant, citrus, full-bodied",
+		"notes": "High solubility - grind coarser to control extraction"
+	},
+	{
+		"id": "sl34",
+		"name": "SL34",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium-high",
+			"beanSize": "medium",
+			"solubility": "high",
+			"sugarContent": "high"
+		},
+		"extractionModifier": 1,
+		"flavorProfile": "Complex fruity notes, wine-like acidity, heavy body",
+		"notes": "Similar to SL28 but slightly less soluble"
+	},
+	{
+		"id": "pacamara",
+		"name": "Pacamara",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "low-medium",
+			"beanSize": "very-large",
+			"solubility": "medium-high",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": 5,
+		"flavorProfile": "Floral, fruity, chocolate, creamy body, complex",
+		"notes": "Very large beans - requires coarser grind"
+	},
+	{
+		"id": "maragogype",
+		"name": "Maragogype",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "low",
+			"beanSize": "very-large",
+			"solubility": "medium",
+			"sugarContent": "low-medium"
+		},
+		"extractionModifier": 6,
+		"flavorProfile": "Mild, low acidity, smooth, nutty",
+		"notes": "Elephant bean - largest coffee bean, needs coarse grind"
+	},
+	{
+		"id": "catimor",
+		"name": "Catimor",
+		"species": "Arabica/Robusta Hybrid",
+		"characteristics": {
+			"beanDensity": "high",
+			"beanSize": "small",
+			"solubility": "low-medium",
+			"sugarContent": "low"
+		},
+		"extractionModifier": -4,
+		"flavorProfile": "Earthy, woody, low acidity, full body",
+		"notes": "Disease-resistant hybrid - denser, harder beans need finer grind"
+	},
+	{
+		"id": "mundo-novo",
+		"name": "Mundo Novo",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium-high",
+			"beanSize": "medium",
+			"solubility": "medium",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": -1,
+		"flavorProfile": "Nutty, chocolate, low acidity, sweet",
+		"notes": "Natural hybrid of Typica and Bourbon"
+	},
+	{
+		"id": "villa-sarchi",
+		"name": "Villa Sarchi",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium",
+			"beanSize": "small-medium",
+			"solubility": "medium-high",
+			"sugarContent": "high"
+		},
+		"extractionModifier": 1,
+		"flavorProfile": "Citrus, floral, bright acidity, complex",
+		"notes": "Bourbon mutation from Costa Rica"
+	},
+	{
+		"id": "java",
+		"name": "Java",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium",
+			"beanSize": "medium-large",
+			"solubility": "medium",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": 1,
+		"flavorProfile": "Herbal, spicy, earthy with low acidity",
+		"notes": "Old Typica lineage from Indonesia"
+	},
+	{
+		"id": "batian",
+		"name": "Batian",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "high",
+			"beanSize": "medium",
+			"solubility": "medium-high",
+			"sugarContent": "medium-high"
+		},
+		"extractionModifier": -1,
+		"flavorProfile": "Fruity, citrus, balanced acidity",
+		"notes": "Modern Kenyan variety - disease resistant"
+	},
+	{
+		"id": "kent",
+		"name": "Kent",
+		"species": "Arabica",
+		"characteristics": {
+			"beanDensity": "medium",
+			"beanSize": "medium",
+			"solubility": "medium",
+			"sugarContent": "medium"
+		},
+		"extractionModifier": 0,
+		"flavorProfile": "Balanced, smooth, medium body",
+		"notes": "Disease-resistant Typica selection from India"
+	},
+	{
+		"id": "robusta",
+		"name": "Robusta",
+		"species": "Robusta (Canephora)",
+		"characteristics": {
+			"beanDensity": "very-high",
+			"beanSize": "small",
+			"solubility": "low",
+			"sugarContent": "very-low"
+		},
+		"extractionModifier": -6,
+		"flavorProfile": "Strong, bitter, earthy, woody, high caffeine",
+		"notes": "Very dense beans with tough cell structure - requires fine grind and longer extraction"
+	},
+	{
+		"id": "liberica",
+		"name": "Liberica",
+		"species": "Liberica",
+		"characteristics": {
+			"beanDensity": "low",
+			"beanSize": "very-large",
+			"solubility": "low",
+			"sugarContent": "low"
+		},
+		"extractionModifier": 7,
+		"flavorProfile": "Smoky, nutty, woody, fruity, unique floral",
+		"notes": "Irregular shaped large beans - coarse grind needed"
+	},
+	{
+		"id": "heirloom-ethiopian",
+		"name": "Heirloom Ethiopian",
+		"species": "Arabica (wild/indigenous)",
+		"characteristics": {
+			"beanDensity": "medium-low",
+			"beanSize": "variable",
+			"solubility": "high",
+			"sugarContent": "medium-high"
+		},
+		"extractionModifier": 3,
+		"flavorProfile": "Complex florals, stone fruit, bergamot, wine-like",
+		"notes": "Wild genetic diversity - grind slightly coarser due to high solubility and variable density"
+	}
+]

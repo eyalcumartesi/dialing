@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Coffee color palette */
+  --espresso: #1a1209;
+  --coffee-dark: #2d1f16;
+  --coffee-medium: #5c4033;
+  --cream: #f5e6d0;
+  --cream-dark: #e8d4b8;
+  --amber: #c87941;
+  --amber-dark: #a65f2f;
+  --copper: #b87333;
+
+  /* Semantic colors */
+  --background: var(--espresso);
+  --foreground: var(--cream);
+  --card-bg: var(--coffee-dark);
+  --card-border: var(--coffee-medium);
+  --accent: var(--amber);
+  --accent-hover: var(--amber-dark);
+
+  /* Typography */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+@theme inline {
+  /* Colors */
+  --color-espresso: var(--espresso);
+  --color-coffee-dark: var(--coffee-dark);
+  --color-coffee-medium: var(--coffee-medium);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-amber: var(--amber);
+  --color-amber-dark: var(--amber-dark);
+  --color-copper: var(--copper);
+
+  /* Fonts */
+  --font-heading: var(--font-serif);
+  --font-body: var(--font-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Headings use serif font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "classic",
+    "name": "Classic Espresso",
+    "description": "Brazil-heavy blend with nutty, chocolatey profile",
+    "extractionModifier": -2,
+    "flavorNotes": "Chocolate, nuts, caramel, balanced acidity",
+    "commonComponents": ["Brazil (60-70%)", "Colombia/Central America (20-30%)", "Optional robusta (5-10%)"]
+  },
+  {
+    "id": "bright-fruity",
+    "name": "Bright & Fruity",
+    "description": "Ethiopian/Kenyan-heavy blend with vibrant acidity",
+    "extractionModifier": -4,
+    "flavorNotes": "Berries, citrus, floral, tea-like brightness",
+    "commonComponents": ["Ethiopia (40-60%)", "Kenya (20-40%)", "Latin American base (20-30%)"]
+  },
+  {
+    "id": "balanced",
+    "name": "Balanced Modern",
+    "description": "Latin American base with subtle complexity",
+    "extractionModifier": 0,
+    "flavorNotes": "Milk chocolate, stone fruit, mild acidity, clean finish",
+    "commonComponents": ["Colombia (40-50%)", "Brazil (30-40%)", "Central America (10-20%)"]
+  },
+  {
+    "id": "dark-bold",
+    "name": "Dark & Bold",
+    "description": "Italian-style blend with robusta, low acidity",
+    "extractionModifier": 5,
+    "flavorNotes": "Dark chocolate, tobacco, earthy, full body, low acidity",
+    "commonComponents": ["Brazil (50-60%)", "Robusta (20-30%)", "Indonesia (10-20%)"]
+  },
+  {
+    "id": "unknown",
+    "name": "Unknown / Custom",
+    "description": "Blend composition unknown - neutral extraction settings",
+    "extractionModifier": 0,
+    "flavorNotes": "Varies - algorithm will use baseline extraction",
+    "commonComponents": ["Check your coffee bag for more details"]
+  }
+]

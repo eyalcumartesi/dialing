@@ -1,0 +1,347 @@
+[
+	{
+		"id": "ethiopia",
+		"country": "Ethiopia",
+		"region": "East Africa",
+		"characteristics": {
+			"typicalAltitude": "very-high",
+			"altitudeRange": "1500-2200m",
+			"soilType": "volcanic, rich minerals",
+			"processingTradition": "natural, washed",
+			"climateType": "tropical highland"
+		},
+		"extractionModifier": -4,
+		"densityFactor": "high",
+		"reasoning": "High altitude creates very dense beans requiring finer grind. Rich volcanic soil and heirloom genetics contribute to complex soluble compounds.",
+		"commonVarietals": ["heirloom-ethiopian", "typica", "gesha"],
+		"flavorProfile": "Floral, bergamot, stone fruit, wine-like, tea-like"
+	},
+	{
+		"id": "kenya",
+		"country": "Kenya",
+		"region": "East Africa",
+		"characteristics": {
+			"typicalAltitude": "very-high",
+			"altitudeRange": "1400-2000m",
+			"soilType": "volcanic, red soil",
+			"processingTradition": "washed, double fermentation",
+			"climateType": "tropical highland"
+		},
+		"extractionModifier": -3,
+		"densityFactor": "very-high",
+		"reasoning": "Extreme altitude and volcanic soil create exceptionally dense beans. Double fermentation adds complexity. Requires finer grind.",
+		"commonVarietals": ["sl28", "sl34", "batian"],
+		"flavorProfile": "Black currant, citrus, wine-like acidity, full body"
+	},
+	{
+		"id": "colombia",
+		"country": "Colombia",
+		"region": "South America",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1200-2000m",
+			"soilType": "volcanic",
+			"processingTradition": "washed",
+			"climateType": "tropical"
+		},
+		"extractionModifier": -3,
+		"densityFactor": "high",
+		"reasoning": "High altitude and volcanic soil create dense beans. Slow cherry maturation develops complex sugars. Grind finer.",
+		"commonVarietals": ["caturra", "castillo", "typica", "bourbon"],
+		"flavorProfile": "Caramel, bright acidity, balanced, medium body"
+	},
+	{
+		"id": "brazil-minas-gerais",
+		"country": "Brazil",
+		"region": "South America",
+		"subRegion": "Minas Gerais",
+		"characteristics": {
+			"typicalAltitude": "medium-high",
+			"altitudeRange": "800-1300m",
+			"soilType": "mineral-rich",
+			"processingTradition": "natural, pulped natural",
+			"climateType": "subtropical"
+		},
+		"extractionModifier": -1,
+		"densityFactor": "medium-high",
+		"reasoning": "Medium-high altitude with pulped natural processing creates moderate density. Natural processing adds body.",
+		"commonVarietals": ["mundo-novo", "catuai", "bourbon"],
+		"flavorProfile": "Nutty, chocolate, caramel, low acidity, sweet"
+	},
+	{
+		"id": "brazil-cerrado",
+		"country": "Brazil",
+		"region": "South America",
+		"subRegion": "Cerrado",
+		"characteristics": {
+			"typicalAltitude": "medium",
+			"altitudeRange": "700-1200m",
+			"soilType": "red-yellow latosol",
+			"processingTradition": "natural, semi-washed",
+			"climateType": "savanna, dry season"
+		},
+		"extractionModifier": 2,
+		"densityFactor": "medium",
+		"reasoning": "Lower altitude and dry climate create less dense beans. Natural processing common. Grind slightly coarser.",
+		"commonVarietals": ["catuai", "mundo-novo", "bourbon"],
+		"flavorProfile": "Smooth, chocolatey, nutty, mild"
+	},
+	{
+		"id": "costa-rica",
+		"country": "Costa Rica",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1200-1700m",
+			"soilType": "volcanic",
+			"processingTradition": "honey, washed",
+			"climateType": "tropical"
+		},
+		"extractionModifier": -2,
+		"densityFactor": "high",
+		"reasoning": "High altitude volcanic terroir. Honey processing adds sugars and body. Moderately dense beans.",
+		"commonVarietals": ["caturra", "catuai", "villa-sarchi"],
+		"flavorProfile": "Bright citrus, honey sweetness, balanced"
+	},
+	{
+		"id": "guatemala",
+		"country": "Guatemala",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1300-2000m",
+			"soilType": "volcanic",
+			"processingTradition": "washed",
+			"climateType": "tropical highland"
+		},
+		"extractionModifier": -3,
+		"densityFactor": "high",
+		"reasoning": "Very high altitude and volcanic soil create dense beans with complex sugars. Requires finer grind.",
+		"commonVarietals": ["bourbon", "caturra", "catuai"],
+		"flavorProfile": "Chocolate, spice, smoky, full body"
+	},
+	{
+		"id": "yemen",
+		"country": "Yemen",
+		"region": "Middle East",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1000-2400m",
+			"soilType": "terraced, mineral",
+			"processingTradition": "traditional dry/natural",
+			"climateType": "arid, highland"
+		},
+		"extractionModifier": 3,
+		"densityFactor": "medium-variable",
+		"reasoning": "Traditional dry processing on terraces creates uneven density. Ancient methods. Grind coarser to accommodate variability.",
+		"commonVarietals": ["typica", "bourbon", "heirloom"],
+		"flavorProfile": "Complex, wine-like, dried fruit, spice, wild"
+	},
+	{
+		"id": "panama",
+		"country": "Panama",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "very-high",
+			"altitudeRange": "1400-1900m",
+			"soilType": "volcanic",
+			"processingTradition": "washed, natural",
+			"climateType": "tropical cloud forest"
+		},
+		"extractionModifier": -2,
+		"densityFactor": "medium-high",
+		"reasoning": "High altitude cloud forest. Famous for Gesha cultivation. Moderate density with complex flavor development.",
+		"commonVarietals": ["gesha", "caturra", "catuai"],
+		"flavorProfile": "Floral, jasmine, citrus, delicate, complex"
+	},
+	{
+		"id": "honduras",
+		"country": "Honduras",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "medium-high",
+			"altitudeRange": "1000-1700m",
+			"soilType": "volcanic, clay",
+			"processingTradition": "washed",
+			"climateType": "tropical"
+		},
+		"extractionModifier": -1,
+		"densityFactor": "medium-high",
+		"reasoning": "Medium-high altitude with good density. Washed processing standard.",
+		"commonVarietals": ["caturra", "catuai", "pacas"],
+		"flavorProfile": "Caramel, fruity, balanced acidity"
+	},
+	{
+		"id": "rwanda",
+		"country": "Rwanda",
+		"region": "East Africa",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1700-2000m",
+			"soilType": "volcanic",
+			"processingTradition": "washed",
+			"climateType": "tropical highland"
+		},
+		"extractionModifier": -3,
+		"densityFactor": "high",
+		"reasoning": "High altitude volcanic terroir similar to Kenya/Ethiopia. Dense beans with bright acidity.",
+		"commonVarietals": ["bourbon", "caturra"],
+		"flavorProfile": "Citrus, floral, berry notes, bright"
+	},
+	{
+		"id": "burundi",
+		"country": "Burundi",
+		"region": "East Africa",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1250-2000m",
+			"soilType": "volcanic",
+			"processingTradition": "washed",
+			"climateType": "tropical highland"
+		},
+		"extractionModifier": -3,
+		"densityFactor": "high",
+		"reasoning": "Similar to Rwanda - high altitude, volcanic soil, dense beans.",
+		"commonVarietals": ["bourbon", "jackson"],
+		"flavorProfile": "Cherry, citrus, sweet, complex"
+	},
+	{
+		"id": "indonesia-sumatra",
+		"country": "Indonesia",
+		"region": "Southeast Asia",
+		"subRegion": "Sumatra",
+		"characteristics": {
+			"typicalAltitude": "medium",
+			"altitudeRange": "800-1500m",
+			"soilType": "volcanic",
+			"processingTradition": "wet-hulled (Giling Basah)",
+			"climateType": "tropical rainforest"
+		},
+		"extractionModifier": 4,
+		"densityFactor": "low-medium",
+		"reasoning": "Wet-hulled processing creates lower density, more porous beans. Unique earthy profile. Requires coarser grind.",
+		"commonVarietals": ["catimor", "typica", "bourbon"],
+		"flavorProfile": "Earthy, herbal, full body, low acidity"
+	},
+	{
+		"id": "indonesia-java",
+		"country": "Indonesia",
+		"region": "Southeast Asia",
+		"subRegion": "Java",
+		"characteristics": {
+			"typicalAltitude": "medium",
+			"altitudeRange": "900-1800m",
+			"soilType": "volcanic",
+			"processingTradition": "wet-hulled, washed",
+			"climateType": "tropical"
+		},
+		"extractionModifier": 2,
+		"densityFactor": "medium",
+		"reasoning": "Mix of processing methods. Moderate density with earthy character.",
+		"commonVarietals": ["java", "typica"],
+		"flavorProfile": "Herbal, spicy, earthy, mild"
+	},
+	{
+		"id": "vietnam",
+		"country": "Vietnam",
+		"region": "Southeast Asia",
+		"characteristics": {
+			"typicalAltitude": "low-medium",
+			"altitudeRange": "500-1500m",
+			"soilType": "basalt, red soil",
+			"processingTradition": "natural, washed",
+			"climateType": "tropical monsoon"
+		},
+		"extractionModifier": 1,
+		"densityFactor": "medium-low",
+		"reasoning": "Primarily Robusta production. Lower altitude Arabica less dense. Mixed processing.",
+		"commonVarietals": ["robusta", "catimor"],
+		"flavorProfile": "Bold, earthy, chocolatey (mostly Robusta)"
+	},
+	{
+		"id": "peru",
+		"country": "Peru",
+		"region": "South America",
+		"characteristics": {
+			"typicalAltitude": "medium-high",
+			"altitudeRange": "900-1800m",
+			"soilType": "mountain slopes",
+			"processingTradition": "washed, natural",
+			"climateType": "tropical"
+		},
+		"extractionModifier": -1,
+		"densityFactor": "medium-high",
+		"reasoning": "Medium-high altitude with organic farming common. Moderate to good density.",
+		"commonVarietals": ["typica", "caturra", "bourbon"],
+		"flavorProfile": "Nutty, chocolate, mild acidity, balanced"
+	},
+	{
+		"id": "el-salvador",
+		"country": "El Salvador",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "high",
+			"altitudeRange": "1200-1800m",
+			"soilType": "volcanic",
+			"processingTradition": "honey, washed, natural",
+			"climateType": "tropical"
+		},
+		"extractionModifier": -2,
+		"densityFactor": "high",
+		"reasoning": "High volcanic altitude. Birthplace of Pacamara. Dense beans with varied processing.",
+		"commonVarietals": ["pacamara", "bourbon", "pacas"],
+		"flavorProfile": "Fruity, caramel, balanced complexity"
+	},
+	{
+		"id": "mexico",
+		"country": "Mexico",
+		"region": "Central America",
+		"characteristics": {
+			"typicalAltitude": "medium-high",
+			"altitudeRange": "900-1700m",
+			"soilType": "volcanic, limestone",
+			"processingTradition": "washed",
+			"climateType": "varied (tropical to temperate)"
+		},
+		"extractionModifier": 0,
+		"densityFactor": "medium",
+		"reasoning": "Varied altitudes and climates create medium density. Well-balanced baseline.",
+		"commonVarietals": ["typica", "bourbon", "mundo-novo"],
+		"flavorProfile": "Nutty, chocolate, caramel, light acidity"
+	},
+	{
+		"id": "india",
+		"country": "India",
+		"region": "Asia",
+		"characteristics": {
+			"typicalAltitude": "medium",
+			"altitudeRange": "600-1500m",
+			"soilType": "laterite",
+			"processingTradition": "monsooned, washed",
+			"climateType": "monsoon"
+		},
+		"extractionModifier": 3,
+		"densityFactor": "low-medium",
+		"reasoning": "Monsooned processing exposes beans to moisture, reducing density. Unique process requires coarser grind.",
+		"commonVarietals": ["kent", "sl795", "catimor"],
+		"flavorProfile": "Spicy, earthy, low acidity, full body"
+	},
+	{
+		"id": "hawaii-kona",
+		"country": "United States",
+		"region": "North America",
+		"subRegion": "Hawaii - Kona",
+		"characteristics": {
+			"typicalAltitude": "medium",
+			"altitudeRange": "150-900m",
+			"soilType": "volcanic",
+			"processingTradition": "washed",
+			"climateType": "tropical maritime"
+		},
+		"extractionModifier": 1,
+		"densityFactor": "medium",
+		"reasoning": "Lower altitude but rich volcanic soil and ideal climate. Moderate density with clean processing.",
+		"commonVarietals": ["typica", "caturra"],
+		"flavorProfile": "Smooth, nutty, mild acidity, balanced"
+	}
+]
